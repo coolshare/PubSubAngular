@@ -46,7 +46,21 @@ class Sub {
 		this.param = param ||{};
 	}
 }
-
+class Pub {
+    anchor:any;
+    id:string;
+    event:string;
+    
+    constructor(options:any) { 
+        this.anchor = options.anchor;
+        this.id = options.id;
+        this.event = options.event;
+        
+        //$(options.anchor).on(options.event, function() {
+        //    huawei.publish(topicName, options);
+       // });
+    }
+}
 
 class Topic {
 	name:string;
@@ -182,7 +196,20 @@ class PubSubManager {
 		}
 		this.publish(topicName, opt);
 	}
-	
+	register = (topicName, options) => {
+        var topic = this.topicMap[topicName];
+        if (topic == null) {
+            topic = this.topicMap[topicName] = new Topic(
+                    topicName);
+        }
+        if (!options.anchor) {
+            console.log("ERROR: The anchor is missing for register a pub")
+            return;
+        }
+        topic.pubMap[options.id] = new Pub(options);
+
+    }
+    
 	getId(pre:string) {
 		let v:string = pre+new Date().valueOf();
 		//console.info("v="+v)
@@ -209,4 +236,5 @@ class PubSubManager {
 	    return color;
 	}
 }
-export let pm = new PubSubManager();
+let pm = new PubSubManager();
+export default pm;

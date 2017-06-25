@@ -28,7 +28,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 */
 
 import { Directive, ElementRef } from '@angular/core';
-import {pm} from './PubSubManager'
+import pm from './PubSubManager'
 
 
 @Directive({ selector: '[publisher]' })

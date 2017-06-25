@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {pm} from './PubSubManager/PubSubManager'
+import { Component  } from '@angular/core';
+import {UIComponent} from './common/UIComponent'
 
 @Component({
  
@@ -25,25 +25,26 @@ import {pm} from './PubSubManager/PubSubManager'
 	 	</div>`
 })
  
-export class RightPaneComponent {
+export class RightPaneComponent extends UIComponent{
  
-	name = "Right Pane Component";
+	name = "RightPaneComponent";
 	originalName = "";
 	bg = "#888";
 	fg = "#000";
 	subscriptionMap = new Map();
 	constructor() {
+        super(name);
 		var self = this;
 		var topic = "/LeftPane/Botton/bg";
-	    self.subscriptionMap[topic] = pm.subscribe(topic, function(options:any) {
-	    	pm.log("LeftPane received topic "+topic+" and options="+JSON.stringify(options));
+	    self.subscriptionMap[topic] = self.subscribe(topic, function(options:any) {
+	    	self.log("LeftPane received topic "+topic+" and options="+JSON.stringify(options));
 	    	self.bg = options.color;
 	    });
 	    
 	    topic = "/InsidePane/Link/fg";
-	    self.subscriptionMap[topic] = pm.subscribe(topic, function(options:any) {
-	    	pm.log("LeftPane received topic "+topic+" and options="+JSON.stringify(options));
-		    self.fg = pm.getRandomColor();
+	    self.subscriptionMap[topic] = self.subscribe(topic, function(options:any) {
+	    	self.log("LeftPane received topic "+topic+" and options="+JSON.stringify(options));
+		    self.fg = self.getRandomColor();
 		});  
 		
 		self.originalName = self.name;
@@ -52,12 +53,12 @@ export class RightPaneComponent {
  	handleCheckbox(e:any) {
 		var self = this;
 		if (e.target.checked) {
-			self.subscriptionMap["/Inside/append/text"] = pm.subscribe("/Inside/append/text", function(options:any) {
-		    	pm.log("RightPane received topic /Inside/append/text and options="+JSON.stringify(options));
+			self.subscriptionMap["/Inside/append/text"] = self.subscribe("/Inside/append/text", function(options:any) {
+		    	self.log("RightPane received topic /Inside/append/text and options="+JSON.stringify(options));
 		    	self.name = self.originalName+" "+options.text;
 		    });
 		} else {
-			pm.unsubscribe("/Inside/append/text", self.subscriptionMap["/Inside/append/text"]);
+			self.unsubscribe("/Inside/append/text", self.subscriptionMap["/Inside/append/text"]);
 		}
 	}   
 }

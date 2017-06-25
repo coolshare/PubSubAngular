@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {pm} from './PubSubManager/PubSubManager'
+import { Component  } from '@angular/core';
+import {UIComponent} from './common/UIComponent'
  
 @Component({
  
@@ -24,23 +24,24 @@ import {pm} from './PubSubManager/PubSubManager'
         </div>`
 })
  
-export class InsidePaneComponent {
-	name = "Inside Pane Component";
+export class InsidePaneComponent extends UIComponent {
+	name = "InsidePaneComponent";
 	originalName = "";
 	subscriptionMap = new Map();
  	constructor() {
+        super(name);
 		var self = this;
 		self.originalName = self.name;  
 	}
 	handleCheckbox(e:any) {
 		var self = this;
 		if (e.target.checked) {
-			self.subscriptionMap["/Inside/append/text"] = pm.subscribe("/Inside/append/text", function(options:any) {
-		    	pm.log("InsidePane received topic /Inside/append/text and options="+JSON.stringify(options));
+			self.subscriptionMap["/Inside/append/text"] = self.subscribe("/Inside/append/text", function(options:any) {
+		    	self.log("InsidePane received topic /Inside/append/text and options="+JSON.stringify(options));
 		    	self.name = self.originalName+" "+options.text;
 		    });
 		} else {
-			pm.unsubscribe("/Inside/append/text", self.subscriptionMap["/Inside/append/text"]);
+			self.unsubscribe("/Inside/append/text", self.subscriptionMap["/Inside/append/text"]);
 		}
 	}    
 }

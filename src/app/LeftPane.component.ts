@@ -1,6 +1,5 @@
 import { Component, NgZone  } from '@angular/core';
-import {pm} from './PubSubManager/PubSubManager'
-
+import {UIComponent} from './common/UIComponent'
 
 @Component({
 	selector: 'left-pane-component',
@@ -20,8 +19,8 @@ import {pm} from './PubSubManager/PubSubManager'
                </div>`
 })
  
-export class LeftPaneComponent {
-    name = "LeftPane Component";
+export class LeftPaneComponent extends UIComponent{
+    name = "LeftPaneComponent";
     hh = 400;
     fg = "#000";
     bg = "#bbb";
@@ -29,23 +28,24 @@ export class LeftPaneComponent {
 	subscriptionMap = new Map();
 	
  	constructor(public zone: NgZone) {
+        super(name);
 		var self = this;
 		self.zone = zone;
 		
-	    self.subscriptionMap["/RightPane/Botton/dh"] = pm.subscribe("/RightPane/Botton/dh", function(options:any) {
-	    	pm.log("LeftPane received topic /RightPane/Botton/dh and options="+JSON.stringify(options));
+	    self.subscriptionMap["/RightPane/Botton/dh"] = self.subscribe("/RightPane/Botton/dh", function(options:any) {
+	    	self.log("LeftPane received topic /RightPane/Botton/dh and options="+JSON.stringify(options));
 		    self.zone.run(() => {
 				self.hh += options.dh
 	    	}); 
 		});  
 		
-		self.subscriptionMap["/InsidePane/Link/fg"] = pm.subscribe("/InsidePane/Link/fg", function(options:any) {
-	    	pm.log("LeftPane received topic /InsidePane/Link/fg and options="+JSON.stringify(options));
-		    self.fg = pm.getRandomColor();
+		self.subscriptionMap["/InsidePane/Link/fg"] = self.subscribe("/InsidePane/Link/fg", function(options:any) {
+	    	self.log("LeftPane received topic /InsidePane/Link/fg and options="+JSON.stringify(options));
+		    self.fg = self.getRandomColor();
 		}); 
 		
-		self.subscriptionMap["/RightPane/Dropdown/bg"] = pm.subscribe("/RightPane/Dropdown/bg", function(options:any) {
-	    	pm.log("LeftPane received topic /RightPane/Dropdown/bg and options="+JSON.stringify(options));
+		self.subscriptionMap["/RightPane/Dropdown/bg"] = self.subscribe("/RightPane/Dropdown/bg", function(options:any) {
+	    	self.log("LeftPane received topic /RightPane/Dropdown/bg and options="+JSON.stringify(options));
 		    self.bg = options.bgColor;
 		}); 
 		
@@ -55,12 +55,12 @@ export class LeftPaneComponent {
 	handleCheckbox(e:any) {
 		var self = this;
 		if (e.target.checked) {
-			self.subscriptionMap["/Inside/append/text"] = pm.subscribe("/Inside/append/text", function(options:any) {
-		    	pm.log("LeftPane received topic /Inside/append/text and options="+JSON.stringify(options));
+			self.subscriptionMap["/Inside/append/text"] = self.subscribe("/Inside/append/text", function(options:any) {
+		    	self.log("LeftPane received topic /Inside/append/text and options="+JSON.stringify(options));
 		    	self.name = self.originalName+" "+options.text;
 		    });
 		} else {
-			pm.unsubscribe("/Inside/append/text", self.subscriptionMap["/Inside/append/text"]);
+			self.unsubscribe("/Inside/append/text", self.subscriptionMap["/Inside/append/text"]);
 		}
 	}    
 }
