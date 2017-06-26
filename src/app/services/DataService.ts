@@ -1,10 +1,9 @@
 import UIService from '../common/UIService'
 
-class _DataService extends UIService{
-    name:string = "DataService";
+export default class DataService extends UIService{
     dataMap:any = {};
     constructor() {	
-        super(name);
+        super("DataService");
         let self = this;
         this.subscribe("/dataService/set", function(options:any) {
         	self.dataMap[options.key] = options.value;
@@ -28,5 +27,5 @@ class _DataService extends UIService{
 		delete this.dataMap[key];
 	}
 };
-let ds = new _DataService();
-export default ds;
+//let ds = new _DataService();
+//export default ds;

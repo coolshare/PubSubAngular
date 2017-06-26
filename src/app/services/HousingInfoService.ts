@@ -1,22 +1,21 @@
 import UIService from '../common/UIService'
-import RemoteService from './RemoteService'
+import ServiceManager from '../common/ServiceManager'
 
-class _HousingInfoService extends UIService{
-    name:string = "HousingInfoService";
+export default class HousingInfoService extends UIService{
     constructor() {
-        super(name);
+        super("HousingInfoService");
         let self = this;
     	this.subscribe("/HousingInfoService/load", function(options:any) {
+            
     		self.load(options);
     	});
     	
 	}
 
 	
-	load = (options:any={}) => {	
-        options = options||{};	
-		RemoteService.fatchThroughProxy("https://verdant.tchmachines.com/~coolsha/markqian/AngularJS/Directives/RoutedTab/data/House.json");
+	load = (options:any) => {		
+		ServiceManager.get("RemoteService").fatchThroughProxy("https://verdant.tchmachines.com/~coolsha/markqian/AngularJS/Directives/RoutedTab/data/House.json", options);
     }
 }	
-let housingInfoService = new _HousingInfoService();
-export default housingInfoService;
+//let housingInfoService = new _HousingInfoService();
+//export default housingInfoService;

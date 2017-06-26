@@ -83,8 +83,10 @@ class PubSubManager {
 		this.topicMap = new Map<string, Topic>();
 		this.handlerMap = new Map<string, Function>();
 	}
-    
-	subscribe(topicNameList:any, options:any={}) {
+    init = () => {
+        
+    }
+	subscribe = (topicNameList:any, options:any={}) => {
 		options = options || {};
 
 		if (typeof options ==="function" ) {
@@ -123,7 +125,7 @@ class PubSubManager {
 		}
 	}
 	
-	unsubscribe(topicName:string, id:string) {
+	unsubscribe = (topicName:string, id:string)=> {
 		let topic:Topic = this.topicMap[topicName];
 		if (topic == null) {
 			this.log("WARNING: missing topic for:"+id);
@@ -132,7 +134,7 @@ class PubSubManager {
 		delete topic.subMap[id];
 	}
 	
-	publish(topicName:string, options:any={}) {
+	publish = (topicName:string, options:any={}) => {
 		let topic:Topic = this.topicMap[topicName];
 		if (topic === undefined) {			
 			this.topicMap[topicName] = new Topic(
@@ -141,9 +143,13 @@ class PubSubManager {
 			this.log("######WARNING######: there is no subscriber on topic '"+topicName+"'");
 			return;
 		}
-
+        
 		this.log("Publish topic: " + topic.name + " options="+JSON.stringify(options))
 		options = options || {};
+        if (options instanceof Function) {
+            options = {"callback":options};
+        }
+        options.topicName = topicName;
 		for (var id in topic.subMap) {
 			var sub = topic.subMap[id];
 			if (sub.param.skip) {
@@ -181,7 +187,7 @@ class PubSubManager {
 		}
 		
 	}
-	publishSequntially(topicName:string, options:any={}) {
+	publishSequntially = (topicName:string, options:any={})=> {
 		if (options["optionsList"].length<1) {
 			if (options["doneTopics"]) {
 				this.publish(options["doneTopics"]);
@@ -210,24 +216,24 @@ class PubSubManager {
 
     }
     
-	getId(pre:string) {
+	getId = (pre:string)=> {
 		let v:string = pre+new Date().valueOf();
 		//console.info("v="+v)
 		return v;
 	}
 	
-	setLog(id:string) {
+	setLog = (id:string) => {
 		this.loggerId = id;
 	}
 	
-	log(msg:string) {
+	log = (msg:string) => {
 		console.log(msg);
 		if (this.loggerId===undefined) {
 			return;
 		}
 	}
 	
-	getRandomColor() {
+	getRandomColor =() => {
 	    var letters = '0123456789ABCDEF';
 	    var color = '#';
 	    for (var i = 0; i < 6; i++ ) {

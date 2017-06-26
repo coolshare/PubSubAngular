@@ -1,13 +1,24 @@
-class ServiceManager {
-    serviceMap:any = {};
+import DataService from '../services/DataService'
+import HousingInfoService from '../services/HousingInfoService'
+import StockInfoService from '../services/StockInfoService'
+import RemoteService from '../services/RemoteService'
+
+
+export default class ServiceManager {
+    static serviceMap:any = {};
     constructor() {
-        
-        this.serviceMap = {};
+        ServiceManager.serviceMap = {};
+        new DataService();
+        new HousingInfoService();
+        new StockInfoService();
+        new RemoteService();      
     }
-    registerService = (service)=> {
-        this.serviceMap[service.name] = service;
+    public static registerService = (service)=> {
+        ServiceManager.serviceMap[service.name] = service;
     }
-    
+    public static get = (name:string) => {
+        return ServiceManager.serviceMap[name];
+    }
     init = () => {
         
     }
@@ -17,12 +28,11 @@ class ServiceManager {
     //}
     
     get = (sn) => {
-        let res = this.serviceMap[sn];
+        let res = ServiceManager.serviceMap[sn];
         if (res) {
             return res;
         }
         return null;//this.accessExternalService(sn);
     }
 }
-let sm = new ServiceManager();
-export default sm;
+

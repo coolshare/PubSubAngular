@@ -16,7 +16,7 @@ export class UIComponent extends Component {
         //console.log("== "+options.id + " subscribed "+topicName)
         return pm.subscribe(topicName, options);
     }
-    publish = (topicName:string, options:any) => {
+    publish = (topicName:string, options:any=undefined) => {
         options = options ||{};
         options.pub = this.name;
         return pm.publish(topicName, options);

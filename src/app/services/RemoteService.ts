@@ -1,12 +1,18 @@
 import axios from 'axios'
+import UIService from '../common/UIService'
 //??import pm from '../PubSubManager/PubSubManager'
 
-class _RemoteService{
+export default class RemoteService extends UIService{
+    constructor() {
+        super("RemoteService");   
+    }
 	fatchThroughProxy = (url:string, options:any={}, key:string=undefined, result:any=undefined, requests:any=undefined, len:number=0) => {
 		this.fetch("http://73.71.159.185:8888?url="+url, options, key, result, requests, len)
 	};
 	fetch = (url, options, key, result, requests, len) => {
 		let self = this;
+        //debugger
+        
 		return axios.get(url).then(res=>{
 			  if (res.status >= 400) {
 		          throw new Error("Bad response from server");
@@ -45,7 +51,7 @@ class _RemoteService{
 					  options.callback(res.data);
 				  }
 		      }
-			  
+			  self.publish(options.topicName+"/done", res.data);
 		      
 			  return res;
 		  })/*.catch(function (error) {
@@ -77,5 +83,5 @@ class _RemoteService{
 	}
 	
   }
-const RemoteService = new _RemoteService();
-export default RemoteService;
+//const RemoteService = new _RemoteService();
+//export default RemoteService;

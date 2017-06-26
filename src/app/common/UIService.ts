@@ -1,9 +1,10 @@
-import sm from './ServiceManager'
+import ServiceManager from './ServiceManager'
 import pm from '../PubSubManager/PubSubManager'
 
 export default class UIService {
-    constructor(public name:string) {
-        sm.registerService(this);
+    static sm:ServiceManager;
+    constructor(public name:string) { 
+        ServiceManager.registerService(this);
     }
     subscribe = (topicName, options) => {
         if (options instanceof Function) {

@@ -1,5 +1,5 @@
 import { Component  } from '@angular/core';
-import {UIComponent} from './common/UIComponent'
+import {UIComponent} from '../common/UIComponent'
 
 @Component({
  

@@ -145,6 +145,7 @@ var PubSubManager = (function () {
                 }
                 sub.callback.apply(target, [options]);
             }
+            options.topicName = topicName;
             else if (sub.ownerType === "handlerMap") {
                 var item = this.handlerMap[sub.owner];
                 item.method.apply(item.owner, options);

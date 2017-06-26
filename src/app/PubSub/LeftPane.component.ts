@@ -1,5 +1,5 @@
 import { Component, NgZone  } from '@angular/core';
-import {UIComponent} from './common/UIComponent'
+import {UIComponent} from '../common/UIComponent'
 
 @Component({
 	selector: 'left-pane-component',
